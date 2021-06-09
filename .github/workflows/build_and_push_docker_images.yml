@@ -6,7 +6,10 @@ on:
     types: [published]
 env:
   MOSQUITTO_VERSION_1: 1.6.14
+  MOSQUITOO_VERSION_1_SUFFIX: -mosquitto_1.x
   MOSQUITTO_VERSION_2: 2.0.9
+  MOSQUITOO_VERSION_2_SUFFIX: -mosquitto_2.x
+  DOCKERHUB_REPO: mosquitto-go-auth
 jobs:
   mosq_1:
     name: Build and publish with Mosquitto version 1.x
@@ -38,7 +41,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mosquitto-go-auth:${{ github.event.release.tag_name }}-mosquitto_1.x
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:${{ github.event.release.tag_name }}${{ env.MOSQUITOO_VERSION_1_SUFFIX }}
       -
         name: Build and push on push
         if: github.event_name == 'push'
@@ -47,7 +50,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mosquitto-go-auth:latest-mosquitto_1.x
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest${{ env.MOSQUITOO_VERSION_1_SUFFIX }}
   mosq_2:
     name: Build and publish with Mosquitto version 2.x
     runs-on: ubuntu-latest
@@ -78,7 +81,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mosquitto-go-auth:${{ github.event.release.tag_name }}-mosquitto_2.x
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:${{ github.event.release.tag_name }}${{ env.MOSQUITOO_VERSION_2_SUFFIX }}
       -
         name: Build and push on push
         if: github.event_name == 'push'
@@ -87,7 +90,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mosquitto-go-auth:latest-mosquitto_2.x
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest${{ env.MOSQUITOO_VERSION_2_SUFFIX }}
 
 
 
