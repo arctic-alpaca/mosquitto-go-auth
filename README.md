@@ -1528,6 +1528,10 @@ Only images for x86_64/AMD64 and ARMv7 have been tested. ARMv6 and ARM64 hardwar
 #### Prebuilt images
 
 Prebuilt images are provided on Dockerhub under [iegomez/mosquitto-go-auth](https://hub.docker.com/r/iegomez/mosquitto-go-auth).
+
+`latest-mosquitto_1.x` and `latest-mosquitto_2.x` are built from the `master` branch with the corresponding Mosquitto version. `latest` is the same image as `latest-mosquitto_2.x`.
+Releases are tagged and also marked with the corresponding Mosquitto version (for example: `1.5.0-mosquitto_2.x`). 
+
 To run the latest image, use the following command and replace `/conf` with the location of your `.conf` files: 
 `docker run -it -p 1884:1884 -p 1883:1883 -v /conf:/etc/mosquitto iegomez/mosquitto-go-auth`
 

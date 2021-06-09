@@ -6,9 +6,9 @@ on:
     types: [published]
 env:
   MOSQUITTO_VERSION_1: 1.6.14
-  MOSQUITOO_VERSION_1_SUFFIX: -mosquitto_1.x
   MOSQUITTO_VERSION_2: 2.0.9
-  MOSQUITOO_VERSION_2_SUFFIX: -mosquitto_2.x
+  MOSQUITTO_VERSION_SUFFIX: -mosquitto_
+  DOCKERFILE_MOSQUITTO_VERSION: 1.6.14
   DOCKERHUB_REPO: mosquitto-go-auth
 jobs:
   mosq_1:
@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
       - 
         name: Set Mosquitto version
-        run: sed -i 's/ARG MOSQUITTO_VERSION=1.6.14/ARG MOSQUITTO_VERSION=${{ env.MOSQUITTO_VERSION_1 }}/' Dockerfile
+        run: sed -i 's/ARG MOSQUITTO_VERSION=${{ env.DOCKERFILE_MOSQUITTO_VERSION }}/ARG MOSQUITTO_VERSION=${{ env.MOSQUITTO_VERSION_1 }}/' Dockerfile
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -41,7 +41,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:${{ github.event.release.tag_name }}${{ env.MOSQUITOO_VERSION_1_SUFFIX }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:${{ github.event.release.tag_name }}${{ format('{0}{1}', env.MOSQUITTO_VERSION_SUFFIX, env.MOSQUITTO_VERSION_1) }}
       -
         name: Build and push on push
         if: github.event_name == 'push'
@@ -50,7 +50,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest${{ env.MOSQUITOO_VERSION_1_SUFFIX }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest${{ format('{0}{1}', env.MOSQUITTO_VERSION_SUFFIX, env.MOSQUITTO_VERSION_1) }}
   mosq_2:
     name: Build and publish with Mosquitto version 2.x
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
         uses: actions/checkout@v2
       - 
         name: Set Mosquitto version
-        run: sed -i 's/ARG MOSQUITTO_VERSION=1.6.14/ARG MOSQUITTO_VERSION=${{ env.MOSQUITTO_VERSION_2 }}/' Dockerfile
+        run: sed -i 's/ARG MOSQUITTO_VERSION=${{ env.DOCKERFILE_MOSQUITTO_VERSION }}/ARG MOSQUITTO_VERSION=${{ env.MOSQUITTO_VERSION_2 }}/' Dockerfile
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -81,7 +81,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:${{ github.event.release.tag_name }}${{ env.MOSQUITOO_VERSION_2_SUFFIX }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:${{ github.event.release.tag_name }}${{ format('{0}{1}', env.MOSQUITTO_VERSION_SUFFIX, env.MOSQUITTO_VERSION_2) }}
       -
         name: Build and push on push
         if: github.event_name == 'push'
@@ -90,7 +90,9 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest${{ env.MOSQUITOO_VERSION_2_SUFFIX }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest${{ format('{0}{1}', env.MOSQUITTO_VERSION_SUFFIX, env.MOSQUITTO_VERSION_2) }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest
 
 
 
